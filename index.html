@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLEP | Just Like Every Puzzle</title>
+    <meta name="description"
+        content="A browser-based riddle game inspired by Notpron. 100+ levels of pure logic and mystery.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Outfit:wght@300;400;600;800&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<body>
+    <div class="loader-wrapper">
+        <canvas id="matrix-canvas"></canvas>
+        <div class="loader-content">
+            <div class="loader-logo">JLEP<span>PUZZLE</span></div>
+            <div class="loader-status">System Offline</div>
+            <button id="init-button">Start Experience</button>
+        </div>
+    </div>
+
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+    <div class="vignette"></div>
+    <div class="fog-wrapper">
+        <div class="fog-layer layer1"></div>
+        <div class="fog-layer layer2"></div>
+    </div>
+    <div class="site-background"></div>
+    <div class="spotlight"></div>
+    <div class="custom-cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <header>
+        <nav class="glass">
+            <div class="logo glitch-hover">JLEP<span>PUZZLE</span></div>
+            <ul>
+                <li><a href="#welcome">Welcome</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="updates.html">Updates</a></li>
+                <li><a href="#other-games">Other Games</a></li>
+                <li id="nav-profile" class="nav-profile"
+                    style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 20px;"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+
+        <section id="entrance" class="doorway-section">
+            <div class="doorway-container">
+                <div class="door-frame">
+                    <div class="side-arrow left">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    <div class="side-arrow right">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    <a href="level1/index.html" class="door-link">
+                        <img src="doorway.png" alt="A mysterious doorway" class="doorway-img">
+                        <div class="door-glow"></div>
+                    </a>
+                </div>
+                <p class="doorway-hint">Click on the doorway to begin...</p>
+            </div>
+        </section>
+
+
+        <div class="info-wrapper">
+            <section id="welcome" class="info-card glass reveal">
+                <h2 class="glitch-hover">Welcome, solver.</h2>
+                <p>Welcome to <strong>JLEP</strong>, a HTML webpuzzle like Notpron or Polychromasia.</p>
+                <div class="welcome-actions">
+                    <a href="updates.html" class="btn-secondary small">View Updates</a>
+                </div>
+            </section>
+
+            <section id="about" class="info-grid">
+                <div class="info-card glass reveal">
+
+                    <h3> Levels</h3>
+                    <p> Over <strong>100 levels</strong> exists in this puzzle. Can you solve all of them?</p>
+                </div>
+                <div class="info-card glass reveal">
+                    <h3>Inspiration</h3>
+                    <p>JLEP is inspired by <a href="https://notpron.com">Notpron</a> and lots of other puzzles.
+                    </p>
+                </div>
+            </section>
+
+            <section id="other-games" class="info-card glass reveal">
+                <h3>Recommended Games</h3>
+                <div class="games-grid">
+                    <a href="https://polychromasia.surge.sh" target="_blank" class="game-item glass">
+                        <h4>Polychromasia</h4>
+                        <p>Made by DissolvedHelium, a non-linear puzzle. Medium difficulty. </p>
+                    </a>
+                    <a href="https://zedpuzzle.neocities.org" target="_blank" class="game-item glass">
+                        <h4>Zedpuzzle</h4>
+                        <p>A hard puzzle, recommended to solve easier ones first. Hard difficulty.</p>
+                    </a>
+                    <a href="https://notpron.com" target="_blank" class="game-item glass">
+                        <h4>Notpron</h4>
+                        <p>Hardest on the internet lots of vague puzzles. Extreme difficulty. </p>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="glass">
+        <p> Made in 26/2/2026. </p>
+        <p> Code, images are made by AI. </p>
+        <p class="terminal-hint">Press <kbd>Esc</kbd> to access the terminal.</p>
+    </footer>
+
+    <div id="terminal-overlay" class="terminal-overlay">
+        <div class="terminal-window glass">
+            <div class="terminal-scanner scan-v-down"></div>
+            <div class="terminal-scanner scan-v-up"></div>
+            <div class="terminal-scanner scan-h-right"></div>
+            <div class="terminal-scanner scan-h-left"></div>
+            <div class="terminal-header">
+                <span class="terminal-title">JLEP_SYSTEM v0.1</span>
+                <span class="terminal-close" id="terminal-close">[X]</span>
+            </div>
+            <div class="terminal-body" id="terminal-body">
+                <p class="terminal-line system">JLEP System Terminal — Type <span class="cmd">help</span> for commands.
+                </p>
+            </div>
+            <div class="terminal-input-row">
+                <span class="terminal-prompt">>&nbsp;</span>
+                <input type="text" id="terminal-input" class="terminal-input" autocomplete="off" spellcheck="false"
+                    autofocus>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

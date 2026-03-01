@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLEP | Update Log</title>
+    <meta name="description" content="View the latest updates and technical changes to WebPuzzle.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Outfit:wght@300;400;600;800&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<body>
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+    <div class="vignette"></div>
+    <div class="fog-wrapper">
+        <div class="fog-layer layer1"></div>
+        <div class="fog-layer layer2"></div>
+    </div>
+    <div class="site-background"></div>
+    <div class="spotlight"></div>
+    <div class="custom-cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <header>
+        <nav class="glass">
+            <div class="logo glitch-hover">JLEP<span>PUZZLE</span></div>
+            <ul>
+                <li><a href="index.html?skipLoader=true">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="updates.html" class="active-page">Updates</a></li>
+                <li><a href="index.html#other-games">Other games</a></li>
+                <li id="nav-profile" class="nav-profile"
+                    style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 20px;"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="sub-page">
+        <div class="info-wrapper">
+            <section id="updates" class="info-card glass reveal active">
+                <h2 class="glitch-hover">Update Log</h2>
+                <p>Shows list of updates.</p>
+
+                <ul class="log-list">
+                    <span class="date">Feb 26 - March 1, 2026:</span>
+                    <li> Puzzle created.</li>
+                    <li> Added loading screen</li>
+                    <li> Added updates.</li>
+                    <li> Added terminal and leaderboard. </li>
+                </ul>
+
+                <div class="return-container">
+                    <a href="index.html?skipLoader=true" class="btn-primary">Back to Entrance</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
