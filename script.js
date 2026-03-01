@@ -667,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         }, 500);
                     } catch (err) {
-                        setTimeout(() => addTerminalLine('<span class="cmd">ERROR:</span> Connection refused. The global server is currently unreachable.'), 500);
+                        setTimeout(() => addTerminalLine('<span class="cmd">ERROR:</span> ' + err.message + '. (Target: https://jlep-backend.onrender.com)'), 500);
                     }
                 }, 600);
             } else if (sub === 'delete' && args.length >= 2) {
