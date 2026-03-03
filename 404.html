@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controlled | Update Log</title>
-    <meta name="description" content="View the latest updates and technical changes to WebPuzzle.">
+    <title>Controlled | Access Denied</title>
+    <meta name="description" content="Error 404: The requested core file was not found in the mainframe.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -13,6 +13,31 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=1.2">
     <link rel="icon" type="image/png" href="favicon-ctld.png">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+        }
+
+        .error-code {
+            font-family: var(--font-mono);
+            font-size: 5rem;
+            color: var(--primary-color);
+            margin-bottom: 0;
+            text-shadow: 0 0 20px rgba(255, 62, 62, 0.5);
+        }
+
+        .error-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-dim);
+            max-width: 500px;
+        }
+    </style>
 </head>
 
 <body>
@@ -38,41 +63,27 @@
             <ul>
                 <li><a href="index.html?skipLoader=true">Home</a></li>
                 <li><a href="index.html#about">About</a></li>
-                <li><a href="updates.html" class="active-page">Updates</a></li>
+                <li><a href="updates.html">Updates</a></li>
                 <li><a href="index.html#other-games">Other games</a></li>
-                <li id="nav-profile" class="nav-profile"
-                    style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 20px;"></li>
             </ul>
         </nav>
     </header>
 
     <main class="sub-page">
         <div class="info-wrapper">
-            <section id="updates" class="info-card glass reveal active">
-                <h2 class="glitch-hover">Update Log</h2>
-                <p>Shows list of updates.</p>
-
-                <ul class="log-list">
-
-                    <span class="date">March 2 - March 7, 2026:</span>
-                    <li> Updated terminal </li>
-                    <li> Updated background img and entrance to level 1 </li>
-
-                    <span class="date">Feb 26 - March 1, 2026:</span>
-                    <li> Puzzle created </li>
-                    <li> Added leaderboard, terminal and update logs.</li>
-
-                </ul>
-
-                <div class="return-container">
-                    <a href="index.html?skipLoader=true" class="btn-primary">Back to Entrance</a>
-                </div>
-            </section>
+            <div class="error-container">
+                <section class="info-card glass reveal active">
+                    <h1 class="error-code glitch-hover">404</h1>
+                    <h2 class="glitch-hover">ACCESS_DENIED</h2>
+                    <p class="error-message">The requested data could not be retrieved from the mainframe. It
+                        may have been deleted or never existed.</p>
+                    <div class="return-container">
+                        <a href="index.html?skipLoader=true" class="btn-primary">REBOOT TO ENTRANCE</a>
+                    </div>
+                </section>
+            </div>
         </div>
     </main>
-
-
-
 
     <script src="script.js"></script>
 </body>

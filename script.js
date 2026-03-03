@@ -23,7 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let experienceStarted = false;
     const BACKEND_URL = 'https://jlep-backend.onrender.com';
     let statusIdx = 0;
-    const statuses = [
+    const isErrorPage = window.location.pathname.includes('404.html');
+    const statuses = isErrorPage ? [
+        "Scanning Corrupt Sectors...",
+        "Access Denied: 0x404",
+        "Attempting System Re-sync...",
+        "Bypassing Corrupt Kernels...",
+        "FAULT PREVENTED: ACCESS RESTORED"
+    ] : [
         "Initializing Logic...",
         "Decrypting Assets...",
         "Synchronizing Audio...",
@@ -138,20 +145,25 @@ document.addEventListener('DOMContentLoaded', () => {
         createOsc(40, 'sine', 0.12);
         createOsc(60, 'sine', 0.08);
         const mToF = (m) => Math.pow(2, (m - 69) / 12) * 440;
-        const chords = [[48, 51, 55], [44, 48, 51], [41, 44, 48], [43, 46, 50]];
+        const chords = isErrorPage ?
+            [[36, 37, 40], [32, 33, 36], [29, 30, 33]] : // Extreme dissonance + low frequency
+            [[48, 51, 55], [44, 48, 51], [41, 44, 48], [43, 46, 50]];
+        const oscType = isErrorPage ? 'sawtooth' : 'triangle';
         let chordIndex = 0;
         const playChord = () => {
             if (!musicStarted || !experienceStarted) return;
-            chords[chordIndex].forEach(midi => createOsc(mToF(midi), 'triangle', 0.02, 8 + Math.random() * 4));
+            chords[chordIndex].forEach(midi => createOsc(mToF(midi), oscType, 0.015, 8 + Math.random() * 4));
             chordIndex = (chordIndex + 1) % chords.length;
-            setTimeout(playChord, 10000 + Math.random() * 5000);
+            const delay = isErrorPage ? 12000 : 10000;
+            setTimeout(playChord, delay + Math.random() * 5000);
         };
-        const scale = [60, 63, 65, 67, 70, 72, 75];
+        const scale = isErrorPage ? [48, 49, 52, 53] : [60, 63, 65, 67, 70, 72, 75];
         const playShimmer = () => {
             if (!musicStarted || !experienceStarted) return;
             const note = scale[Math.floor(Math.random() * scale.length)];
-            createOsc(mToF(note + 12), 'sine', 0.015, 4 + Math.random() * 3);
-            setTimeout(playShimmer, 2000 + Math.random() * 4000);
+            createOsc(mToF(note + 12), 'sine', 0.01, 3 + Math.random() * 2);
+            const delay = isErrorPage ? 4000 : 2000;
+            setTimeout(playShimmer, delay + Math.random() * 4000);
         };
         playChord();
         playShimmer();
@@ -232,6 +244,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!loader) handleVisibility(true);
     animateCursor();
 
+
+    if (isErrorPage) {
+        experienceStarted = true;
+        triggerAudio();
+        // Fallback for browsers blocking audio without interaction
+        window.addEventListener('click', () => {
+            if (!musicStarted) triggerAudio();
+        }, { once: true });
+    }
 
     if (initBtn) {
         initBtn.addEventListener('click', () => {
@@ -431,33 +452,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const commands = {
             'help': () => addTerminalLine(
-                'Available commands: <span class="cmd">help</span>, <span class="cmd">manual</span>, <span class="cmd">log</span>, <span class="cmd">status</span>, <span class="cmd">about</span>, <span class="cmd">solvers</span>, <span class="cmd">progress</span>, <span class="cmd">ping</span>, <span class="cmd">date</span>, <span class="cmd">clear</span>'
+                'Available commands: <span class="cmd">help</span>, <span class="cmd">manual &lt;cmd&gt;</span>, <span class="cmd">log</span>, <span class="cmd">status</span>, <span class="cmd">about</span>, <span class="cmd">solvers</span>, <span class="cmd">progress</span>, <span class="cmd">ping</span>, <span class="cmd">date</span>, <span class="cmd">reset-system</span>, <span class="cmd">clear</span>'
             ),
-            'manual': () => {
-                addTerminalLine('=== SYSTEM COMMAND MANUAL ===');
-                addTerminalLine('<span class="cmd">help</span>: Displays a concise list of all available commands.');
-                addTerminalLine('<span class="cmd">manual</span>: Opens this detailed functional manual.');
-                addTerminalLine('<span class="cmd">log</span>: Displays recent system history and lore entries.');
-                addTerminalLine('<span class="cmd">status</span>: Reports current system connectivity and active solver state.');
-                addTerminalLine('<span class="cmd">about</span>: Basic information about the Controlled project.');
-                addTerminalLine('<span class="cmd">ping</span>: Measures real-time network latency to external mainframes.');
-                addTerminalLine('<span class="cmd">date</span>: Displays current system timestamp and uptime.');
-                addTerminalLine('<span class="cmd">clear</span>: Wipes the terminal buffer.');
-                addTerminalLine('---');
-                addTerminalLine('<span class="cmd">solvers register &lt;name&gt; &lt;pass&gt;</span>: Creates a new secured profile.');
-                addTerminalLine('<span class="cmd">solvers switch &lt;name&gt; &lt;pass&gt;</span>: Switches to a different local profile.');
-                addTerminalLine('<span class="cmd">solvers rename &lt;old&gt; &lt;new&gt; &lt;pass&gt;</span>: Globally renames a profile.');
-                addTerminalLine('<span class="cmd">solvers delete &lt;name&gt; &lt;pass&gt;</span>: Permanently wipes a profile.');
-                addTerminalLine('<span class="cmd">solvers local</span>: Lists all profiles stored on this device.');
-                addTerminalLine('<span class="cmd">solvers global</span>: Displays the world-wide top rankings.');
-                addTerminalLine('---');
-                addTerminalLine('<span class="cmd">progress reset &lt;pass&gt;</span>: Wipes tracking data for the active solver.');
-                addTerminalLine('<span class="cmd">progress reset all &lt;pass1&gt; ...</span>: Performs a critical factory reset.');
+            'manual': (args) => {
+                if (!args || args.length === 0) {
+                    addTerminalLine('=== SYSTEM COMMAND MANUAL ===');
+                    addTerminalLine('Usage: <span class="cmd">manual &lt;command&gt;</span> to know about a specific command.');
+                    addTerminalLine('Available Manuals: <span class="cmd">help</span>, <span class="cmd">log</span>, <span class="cmd">status</span>, <span class="cmd">about</span>, <span class="cmd">ping</span>, <span class="cmd">date</span>, <span class="cmd">clear</span>, <span class="cmd">solvers</span>, <span class="cmd">progress</span>, <span class="cmd">reset-system</span>');
+                    addTerminalLine('---');
+                    addTerminalLine('Type <span class="cmd">help</span> for a quick summary of all commands.');
+                    return;
+                }
+                const target = args[0].toLowerCase();
+                const manuals = {
+                    'help': 'Displays a concise list of all available system commands.',
+                    'manual': 'Displays detailed information about system commands. Usage: <span class="cmd">manual &lt;command&gt;</span>',
+                    'log': 'View text from logs left by the admin.',
+                    'status': 'Shows current system connectivity and active solver profile.',
+                    'about': 'Information regarding the Controlled game.',
+                    'ping': 'Measures network latency to external mainframes to verify uplink stability.',
+                    'date': 'Shows current system timestamp and session uptime.',
+                    'clear': 'Wipes the terminal buffer and resets the visual output.',
+                    'solvers': 'Profile management system. Usage:<br>' +
+                        ' - <span class="cmd">solvers register &lt;name&gt; &lt;pass&gt;</span>: Create profile.<br>' +
+                        ' - <span class="cmd">solvers switch &lt;name&gt; &lt;pass&gt;</span>: Change active profile.<br>' +
+                        ' - <span class="cmd">solvers local</span> / <span class="cmd">global</span>: View rankings locally (on device) or globally (across all players).<br>' +
+                        ' - <span class="cmd">solvers rename &lt;old&gt; &lt;new&gt; &lt;pass&gt;</span>: Globally rename profile.<br>' +
+                        ' - <span class="cmd">solvers delete &lt;name&gt; &lt;pass&gt;</span>: Permanently wipe profile.',
+                    'progress': 'Progress tracking system. Usage:<br>' +
+                        ' - <span class="cmd">progress</span>: View your stats.<br>' +
+                        ' - <span class="cmd">progress reset &lt;pass&gt;</span>: Reset progress data of active solver.<br>' +
+                        ' - <span class="cmd">progress reset all &lt;pass1&gt; &lt;pass2&gt; ...</span>: Reset all profiles progress.',
+                    'reset-system': 'DANGEROUS: Wipes all local profiles and progress data from this browser immediately. No password required.'
+                };
+
+                if (manuals[target]) {
+                    addTerminalLine(`=== MANUAL: ${target.toUpperCase()} ===`);
+                    addTerminalLine(manuals[target]);
+                } else {
+                    addTerminalLine(`No manual entry found for: <span class="cmd">${target}</span>`);
+                }
             },
             'log': () => {
-                addTerminalLine('[LOG 001] Someone named arandomsolver hacked into my computer and installed this program. Said that no one can escape unless they decrypt this so I tried to figure it out.  — Feb 26, 2026');
-                addTerminalLine('[LOG 002] I found out that the user added some security measures to the program by adding new passwords to all accounts. Mine was some kind of decrypted message. — Mar 01, 2026');
-                addTerminalLine('[LOG 003] The owner added a leaderboard and a progress tracker. I saw that lots of people got infected as well.— Mar 02, 2026');
+                addTerminalLine('[LOG 001] My computer suddenly turned red and showed all this weird stuff.  — Feb 26, 2026');
+                addTerminalLine('[LOG 002] I tried to search around for clues whats going on, but nothing so far. — Mar 01, 2026');
+                addTerminalLine('[LOG 003] I played along and got my profile, password and anything.— Mar 02, 2026');
             },
             'status': () => {
                 const solver = getSolverData();
@@ -538,6 +577,19 @@ document.addEventListener('DOMContentLoaded', () => {
             'clear': () => {
                 if (terminalBody) terminalBody.innerHTML = '';
                 addTerminalLine('Terminal cleared.');
+            },
+            'reset-system': () => {
+                addTerminalLine('<span class="cmd">WARNING:</span> This will permanently wipe all local profiles and progress.');
+                addTerminalLine('Type <span class="cmd">confirm-reset</span> to proceed or <span class="cmd">cancel</span> to abort.');
+            },
+            'confirm-reset': () => {
+                localStorage.removeItem('controlled_solvers_data');
+                if (typeof updateNavProfile === 'function') updateNavProfile();
+                addTerminalLine('SYSTEM WIPE COMPLETE. All local data has been purged.');
+                playSound(150, 'sawtooth', 0.5, 0.04);
+            },
+            'cancel': () => {
+                addTerminalLine('Operation aborted. Data preserved.');
             }
         };
 
@@ -826,7 +878,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (base === 'secret') {
             const passcode = args.join(' ');
             if (!passcode) {
-                addTerminalLine('Usage: <span class="cmd">secret &lt;passcode&gt;</span>');
+                addTerminalLine(`Unknown command: "${cmd}". Type <span class="cmd">help</span> for available commands.`);
+                playSound(200, 'square', 0.15, 0.02);
                 return;
             }
             if (passcode === 'verdict') {
@@ -843,7 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (commands[base]) {
-            commands[base]();
+            commands[base](args);
         } else {
             addTerminalLine(`Unknown command: "${cmd}". Type <span class="cmd">help</span> for available commands.`);
             playSound(200, 'square', 0.15, 0.02);
